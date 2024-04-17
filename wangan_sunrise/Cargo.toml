@@ -1,0 +1,7 @@
+[package]
+name = "wangan_sunrise"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bevy = { version = "0.13", features = ["wayland"] }

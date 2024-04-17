@@ -1,0 +1,3 @@
+[workspace]
+members = ["bevy_nucompat", "nucompat", "enmacompat", "wangan_sunrise"]
+resolver = "2"
