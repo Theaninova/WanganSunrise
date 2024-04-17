@@ -1,8 +1,8 @@
 use crate::{
-    dist_cell::read_dist_cells,
+    dist_cell::{read_dist_cells, EnmaDistTableCell},
     lane::EnmaLaneCell,
-    non_guard::EnmaNonGuardCell,
     section::{read_bank_cell, EnmaBankCell, EnmaSection},
+    sign::EnmaSignCell,
     speed::EnmaSpeedCell,
     windows_pe::WindowsPEFile,
     zebra::EnmaZebraCell,
@@ -72,6 +72,11 @@ pub fn read_area(file: &WindowsPEFile, address: u64) -> Result<EnmaArea, std::io
         non_guard_right: read_dist_cells(file, area.non_guard_right_addr, area.max_dist, false)?,
         speed: read_dist_cells(file, area.speed_addr, area.max_dist, true)?,
         lane: read_dist_cells(file, area.lane_addr, area.max_dist, true)?,
+        non_lane_change: read_dist_cells(file, area.non_lane_change_addr, area.max_dist, false)?,
+        signs: read_dist_cells(file, area.signs_addr, area.max_dist, false)?,
+        notices: read_dist_cells(file, area.notices_addr, area.max_dist, false)?,
+        watches: read_dist_cells(file, area.watches_addr, area.max_dist, false)?,
+        on_comers: read_dist_cells(file, area.on_comers_addr, area.max_dist, false)?,
     })
 }
 
@@ -90,10 +95,17 @@ pub struct EnmaArea {
     pub zebra_left: Vec<EnmaZebraCell>,
     pub zebra_right: Vec<EnmaZebraCell>,
     pub gaps: Vec<f32>,
-    pub non_guard_left: Vec<EnmaNonGuardCell>,
-    pub non_guard_right: Vec<EnmaNonGuardCell>,
+    pub non_guard_left: Vec<EnmaDistTableCell>,
+    pub non_guard_right: Vec<EnmaDistTableCell>,
     pub speed: Vec<EnmaSpeedCell>,
     pub lane: Vec<EnmaLaneCell>,
+    // TODO: other
+    pub non_lane_change: Vec<EnmaDistTableCell>,
+    pub signs: Vec<EnmaSignCell>,
+    pub notices: Vec<EnmaDistTableCell>,
+    pub watches: Vec<EnmaDistTableCell>,
+    pub on_comers: Vec<EnmaDistTableCell>,
+    // TODO: pillers
 }
 
 #[derive(BinRead, Debug)]

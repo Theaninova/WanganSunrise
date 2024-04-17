@@ -1,6 +1,6 @@
-use binrw::BinRead;
-
 use crate::windows_pe::WindowsPEFile;
+use binrw::BinRead;
+use serde::Serialize;
 
 pub trait EnmaDistCell {
     fn dist(&self) -> f32;
@@ -17,13 +17,20 @@ impl EnmaDistCell for f32 {
     }
 }
 
-impl EnmaDistCell for (f32, i32) {
+#[derive(Debug, BinRead, Serialize)]
+pub struct EnmaDistTableCell {
+    pub dist: f32,
+    pub unk1: f32,
+    pub flag: i32,
+}
+
+impl EnmaDistCell for EnmaDistTableCell {
     fn dist(&self) -> f32 {
-        self.0
+        self.dist
     }
 
     fn size() -> u64 {
-        8
+        0xc
     }
 }
 
