@@ -140,6 +140,12 @@ impl WindowsPEFile {
         T: BinRead,
         T::Args<'a>: Default,
     {
+        if address == 0 {
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                "Address null pointer dereference",
+            ));
+        }
         let mut reader = BufReader::new(&self.file);
         if let Some(file_addr) = self.get_file_address(address) {
             reader.seek(std::io::SeekFrom::Start(file_addr as u64))?;

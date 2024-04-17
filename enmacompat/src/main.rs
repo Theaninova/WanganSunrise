@@ -26,13 +26,17 @@ fn main() {
             windows_pe_file.get_file_address(location).unwrap()
         );
 
-        for i in 1..2 {
+        let mut i = 1;
+        loop {
             let address = windows_pe_file.read_addr::<u64>(location + i * 8).unwrap();
+            if address == 0 {
+                break;
+            }
             let area = read_area(&windows_pe_file, address).unwrap();
-
-            let file = File::create(format!("{}.json", area.name)).unwrap();
+            let file = File::create(format!("out/{}.json", area.name)).unwrap();
             let mut writer = std::io::BufWriter::new(file);
             serde_json::to_writer_pretty(&mut writer, &area).unwrap();
+            i += 1;
         }
     } else {
         println!("\x1b[31mArea array location could not found\x1b[0m");
