@@ -1,6 +1,8 @@
 # Enma Compat
 
-Library with CLI tool to work with Enma Engine's emedded data
+Library with CLI tool to work with Enma Engine's emedded data.
+
+As of now only Windows PE files are supported.
 
 ## CLI
 
