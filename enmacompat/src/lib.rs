@@ -2,6 +2,7 @@ pub mod area;
 pub mod dist_cell;
 pub mod lane;
 pub mod meta;
+pub mod non_guard;
 pub mod section;
 pub mod speed;
 mod util;

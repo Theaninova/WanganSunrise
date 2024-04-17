@@ -17,6 +17,16 @@ impl EnmaDistCell for f32 {
     }
 }
 
+impl EnmaDistCell for (f32, i32) {
+    fn dist(&self) -> f32 {
+        self.0
+    }
+
+    fn size() -> u64 {
+        8
+    }
+}
+
 pub fn read_dist_cells<'a, T>(
     file: &WindowsPEFile,
     mut address: u64,

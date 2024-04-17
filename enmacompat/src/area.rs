@@ -1,6 +1,7 @@
 use crate::{
     dist_cell::read_dist_cells,
     lane::EnmaLaneCell,
+    non_guard::EnmaNonGuardCell,
     section::{read_bank_cell, EnmaBankCell, EnmaSection},
     speed::EnmaSpeedCell,
     windows_pe::WindowsPEFile,
@@ -67,6 +68,8 @@ pub fn read_area(file: &WindowsPEFile, address: u64) -> Result<EnmaArea, std::io
         zebra_left: read_dist_cells(file, area.zebra_left_addr, area.max_dist, false)?,
         zebra_right: read_dist_cells(file, area.zebra_left_addr, area.max_dist, false)?,
         gaps: read_dist_cells(file, area.gaps_addr, area.max_dist, false)?,
+        non_guard_left: read_dist_cells(file, area.non_guard_left_addr, area.max_dist, false)?,
+        non_guard_right: read_dist_cells(file, area.non_guard_right_addr, area.max_dist, false)?,
         speed: read_dist_cells(file, area.speed_addr, area.max_dist, true)?,
         lane: read_dist_cells(file, area.lane_addr, area.max_dist, true)?,
     })
@@ -87,8 +90,8 @@ pub struct EnmaArea {
     pub zebra_left: Vec<EnmaZebraCell>,
     pub zebra_right: Vec<EnmaZebraCell>,
     pub gaps: Vec<f32>,
-    // TODO: Non Guard Left
-    // TODO: Non Guard Right
+    pub non_guard_left: Vec<EnmaNonGuardCell>,
+    pub non_guard_right: Vec<EnmaNonGuardCell>,
     pub speed: Vec<EnmaSpeedCell>,
     pub lane: Vec<EnmaLaneCell>,
 }
