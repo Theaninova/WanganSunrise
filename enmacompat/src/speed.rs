@@ -1,6 +1,7 @@
-use crate::windows_pe::WindowsPEFile;
 use binrw::BinRead;
 use serde::Serialize;
+
+use crate::dist_cell::EnmaDistCell;
 
 #[derive(Debug, BinRead, Serialize)]
 pub struct EnmaSpeedCell {
@@ -14,21 +15,12 @@ pub struct EnmaSpeedCell {
     pub pow_22: f32,
 }
 
-pub fn read_speed_cells(
-    file: &WindowsPEFile,
-    mut address: u64,
-    max_dist: f32,
-) -> Result<Vec<EnmaSpeedCell>, std::io::Error> {
-    let mut result = vec![];
-    loop {
-        let speed = file.read_addr::<EnmaSpeedCell>(address)?;
-        let dist = speed.dist;
-        result.push(speed);
-        if dist >= max_dist {
-            break;
-        }
-        address += 0x20;
+impl EnmaDistCell for EnmaSpeedCell {
+    fn dist(&self) -> f32 {
+        self.dist
     }
 
-    Ok(result)
+    fn size() -> u64 {
+        0x20
+    }
 }

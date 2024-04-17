@@ -1,8 +1,10 @@
 use crate::{
-    lane::{read_lane, EnmaLane},
+    dist_cell::read_dist_cells,
+    lane::EnmaLaneCell,
     section::{read_bank_cell, EnmaBankCell, EnmaSection},
-    speed::{read_speed_cells, EnmaSpeedCell},
+    speed::EnmaSpeedCell,
     windows_pe::WindowsPEFile,
+    zebra::EnmaZebraCell,
 };
 use binrw::{BinRead, NullString};
 use serde::Serialize;
@@ -62,8 +64,11 @@ pub fn read_area(file: &WindowsPEFile, address: u64) -> Result<EnmaArea, std::io
             .collect::<Result<_, _>>()?,
         bank_left: read_bank_cell(file, area.bank_left_addr, area.section_count)?,
         bank_right: read_bank_cell(file, area.bank_right_addr, area.section_count)?,
-        speed: read_speed_cells(file, area.speed_addr, area.max_dist)?,
-        lane: read_lane(file, area.lane_addr, area.max_dist)?,
+        zebra_left: read_dist_cells(file, area.zebra_left_addr, area.max_dist, false)?,
+        zebra_right: read_dist_cells(file, area.zebra_left_addr, area.max_dist, false)?,
+        gaps: read_dist_cells(file, area.gaps_addr, area.max_dist, false)?,
+        speed: read_dist_cells(file, area.speed_addr, area.max_dist, true)?,
+        lane: read_dist_cells(file, area.lane_addr, area.max_dist, true)?,
     })
 }
 
@@ -79,13 +84,13 @@ pub struct EnmaArea {
     pub sections: Vec<EnmaSection>,
     pub bank_left: Vec<EnmaBankCell>,
     pub bank_right: Vec<EnmaBankCell>,
-    // TODO: Zebra Left
-    // TODO: Zebra Right
-    // TODO: Gaps
+    pub zebra_left: Vec<EnmaZebraCell>,
+    pub zebra_right: Vec<EnmaZebraCell>,
+    pub gaps: Vec<f32>,
     // TODO: Non Guard Left
     // TODO: Non Guard Right
     pub speed: Vec<EnmaSpeedCell>,
-    pub lane: Vec<EnmaLane>,
+    pub lane: Vec<EnmaLaneCell>,
 }
 
 #[derive(BinRead, Debug)]

@@ -4,21 +4,19 @@ use serde::Serialize;
 use crate::dist_cell::EnmaDistCell;
 
 #[derive(Debug, BinRead, Serialize)]
-pub struct EnmaLaneCell {
+pub struct EnmaZebraCell {
     pub dist: f32,
-    pub unk2: i32,
+    pub unk1: f32,
+    pub unk2: f32,
     pub unk3: i32,
-    pub unk4: f32,
-    pub left: [f32; 2],
-    pub right: [f32; 2],
 }
 
-impl EnmaDistCell for EnmaLaneCell {
+impl EnmaDistCell for EnmaZebraCell {
     fn dist(&self) -> f32 {
         self.dist
     }
 
     fn size() -> u64 {
-        0x20
+        0x10
     }
 }

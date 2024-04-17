@@ -35,8 +35,9 @@ impl EnmaMeta {
         }
 
         println!(
-            "\x1b[32m\x1b[1mArea Array\x1b[0m: \x1b[4m{:#x} ({} items)\x1b[0m",
-            area_array_addr, area_array_count
+            "\x1b[32m\x1b[1mArea Array\x1b[0m: \x1b[4m{:#x} ({} Areas)\x1b[0m",
+            area_array_addr,
+            area_array_count - 1
         );
 
         Ok(Self {
